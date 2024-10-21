@@ -34,7 +34,16 @@ const Header: React.FC = () => {
           onClick={toggleTheme}
           className="bg-gray-800 text-white px-4 py-2 rounded"
         >
-          {theme === 'light' ? <MdDarkMode className='size-5' /> : <MdLightMode className='size-5' />}
+          {theme === 'light' ? 
+          <div>
+            <p className='hidden sm:flex'>Dark Mode</p>
+            <MdDarkMode className='size-5 sm:hidden flex' />
+          </div>  : 
+          <div>
+            <p className='hidden sm:flex'>Light Mode</p>
+            <MdLightMode className='size-5 sm:hidden flex' />
+          </div>
+          }
         </button>
       </div>
     </div>

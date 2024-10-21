@@ -8,7 +8,8 @@ This is a web application that allows users to search for GitHub profiles and vi
 - View profile details including avatar, bio, and location
 - View a list of public repositories
 - Pagination for repositories (if more than 30)
-- Dark mode and light mode toggle
+- Dark mode and light mode toggle (Icon for Mobile View)
+- LocalStorage to store Theme
 
 ## Technologies Used
 
