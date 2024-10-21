@@ -6,7 +6,6 @@ import Search from './components/Search';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import Footer from './components/Footer';
 
 type UserProfile = {
   avatar_url: string;
@@ -73,13 +72,14 @@ export default function Home() {
       {/* Display User Profile */}
       {userProfile && (
         <div className="sm:px-[20%] px-[5%]">
-          <div className="p-4 border rounded grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 border rounded grid grid-cols-1 sm:grid-cols-3 gap-y-4 sm:gap-4">
             <div className='grid grid-cols-1 gap-1'>
               <Image
                 src={userProfile.avatar_url}
                 alt={userProfile.login}
-                className="rounded"
-                width={500} height={500} />
+                className="rounded min-w-full"
+                width={500} height={500} 
+              />
 
               <Link
                 className='uppercase 
@@ -99,7 +99,7 @@ export default function Home() {
             </div>
 
           </div>
-          
+
           {/* Repositories Section */}
           {repos.length > 0 && (
             <div className="my-6 border rounded p-4">
@@ -137,9 +137,6 @@ export default function Home() {
           )}
         </div>
       )}
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
