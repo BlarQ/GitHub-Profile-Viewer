@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
+import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 const Header: React.FC = () => {
     const [theme, setTheme] = useState<string>('light');
@@ -33,7 +34,7 @@ const Header: React.FC = () => {
           onClick={toggleTheme}
           className="bg-gray-800 text-white px-4 py-2 rounded"
         >
-          {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          {theme === 'light' ? <MdDarkMode className='size-5' /> : <MdLightMode className='size-5' />}
         </button>
       </div>
     </div>

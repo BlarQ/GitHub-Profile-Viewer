@@ -26,7 +26,7 @@ type Repo = {
 export default function Home() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [repos, setRepos] = useState<Repo[]>([]);
-  const [error, setError] = useState<string | null>(null);  // Correct usage of error state
+  const [error, setError] = useState<string | null>(null); 
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
   const [page, setPage] = useState(1);
@@ -58,7 +58,7 @@ export default function Home() {
   }, [username, page]);
 
   return (
-    <div className=' dark:bg-gray-800 dark:text-white pb-4 min-h-screen'>
+    <div className=' dark:bg-gray-800 dark:text-white pb-4 min-h-[90vh]'>
       {/* Header */}
       <Header />
 
