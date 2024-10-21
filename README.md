@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitHub Profile Viewer
 
-## Getting Started
+This is a web application that allows users to search for GitHub profiles and view details such as their bio, location, and public repositories. The app also includes pagination for repositories when there are more than 30.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Search for GitHub profiles by username
+- View profile details including avatar, bio, and location
+- View a list of public repositories
+- Pagination for repositories (if more than 30)
+- Dark mode and light mode toggle
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js (React Framework)
+- Tailwind CSS (Styling)
+- Axios (API requests)
+- GitHub REST API
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+1. Clone the repository:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   git clone https://github.com/your-username/github-profile-viewer.git
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repository:
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/your-username/github-profile-viewer.git
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Navigate into the project directory:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   cd github-profile-viewer
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+
+4. Run the application:
+
+   ```bash
+
+   npm run dev
+
+5. Open http://localhost:3000 to view the app in the browser.
+
+# How to Use
+
+1. Enter a GitHub username in the search bar and click "Search".
+2. View the user's profile details and public repositories.
+3. If the user has more than 30 repositories, use the pagination buttons to navigate through them.
+4. Toggle between dark and light mode using the button in the header.
+
+## License
+This project is licensed under the MIT License.
+
+   ```vbnet
+   This completes the requested changes for your GitHub Profile Viewer app. Let me know if you need more adjustments!

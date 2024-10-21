@@ -1,101 +1,135 @@
-import Image from "next/image";
+'use client'
+
+import { useEffect, useState } from 'react';
+import Header from './components/Header';
+import Search from './components/Search';
+import axios from 'axios';
+import Image from 'next/image';
+import Link from 'next/link';
+
+type UserProfile = {
+  avatar_url: string;
+  login: string;
+  bio: string;
+  location: string | null;
+  public_repos: number;
+};
+
+type Repo = {
+  name: string;
+  html_url: string;
+  description: string | null;
+  stargazers_count: number;
+  forks_count: number;
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [repos, setRepos] = useState<Repo[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState<string>('');
+  const [page, setPage] = useState(1);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Fetch profile and repositories
+  useEffect(() => {
+    if (!username) return;
+    setLoading(true);
+    setError(null);
+
+    const fetchUserProfile = async () => {
+      try {
+        const profileRes = await axios.get(`https://api.github.com/users/${username}`);
+        setUserProfile(profileRes.data);
+
+        const repoRes = await axios.get(`https://api.github.com/users/${username}/repos?per_page=30&page=${page}`);
+        setRepos(repoRes.data);
+      } catch (error) {
+        setError('User not found');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [username, page]);
+
+  return (
+    <div>
+      <Header />
+      <Search onSearch={(name) => { setUsername(name); setPage(1); }} />
+
+      {/* Handle Loading Effect */}
+      {loading && <p className="text-center mt-4">Loading...</p>}
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+
+
+      {/* Display User Profile */}
+      {userProfile && (
+        <div className="sm:px-[20%] px-[5%]">
+          <div className="p-4 border rounded grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className='grid grid-cols-1 gap-1'>
+              <Image 
+              src={userProfile.avatar_url} 
+              alt={userProfile.login} 
+              className="rounded" 
+              width={500} height={500} />
+
+              <Link 
+              className='uppercase 
+              bg-[#3d444d] 
+              text-white 
+              p-2 rounded 
+              font-semibold 
+              text-center' 
+              href={`https://www.github.com/${userProfile.login}`}>view profile</Link>
+            </div>
+
+            <div className='col-span-2 border rounded divide-y h-fit'>
+              <h2 className="text-xl font-bold p-2">{userProfile.login}</h2>
+              <p className='p-2'>{userProfile.bio || 'No bio available'}</p>
+              <p className='p-2'>{userProfile.location || 'No location available'}</p>
+              <p className='p-2'>Public Repositories: {userProfile.public_repos}</p>
+            </div>
+
+          </div>
+            {/* Repositories Section */}
+          {repos.length > 0 && (
+            <div className="my-6 border rounded p-4">
+              <h3 className="text-xl font-bold uppercase border-b">Repositories</h3>
+              <ul>
+                {repos.map((repo) => (
+                  <li key={repo.name} className="border-b py-2 w-full">
+                    <Link href={repo.html_url} className="text-blue-500" target="_blank">{repo.name}</Link>
+                    <p>{repo.description || 'No description available'}</p>
+                    <div className="text-sm">⭐ {repo.stargazers_count} | 🍴 {repo.forks_count}</div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* Pagination Controls */}
+              {userProfile.public_repos > 30 && (
+                <div className="flex justify-between mt-4">
+                  <button
+                    className="bg-[#3d444d] text-white px-4 py-2 rounded"
+                    onClick={() => setPage(page - 1)}
+                    disabled={page === 1}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    className="bg-[#3d444d] text-white px-4 py-2 rounded"
+                    onClick={() => setPage(page + 1)}
+                    disabled={repos.length < 30}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
     </div>
   );
 }
