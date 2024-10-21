@@ -15,7 +15,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Dev-Tective",
+  title: "GitHub Profile Viewer",
   description: "GitHub Developer Profile Detective",
 };
 
