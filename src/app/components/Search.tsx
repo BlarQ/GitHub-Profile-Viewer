@@ -25,9 +25,9 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
         </div>
 
         <form onSubmit={handleSearch}>
-          <div className='px-2 border rounded'>
+          <div className='border rounded'>
             <input
-              className='w-full h-10 outline-none'
+              className='w-full h-10 outline-none px-2 text-black font-semibold'
               type="text"
               placeholder="Search for a User"
               value={username}

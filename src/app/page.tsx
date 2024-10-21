@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import Header from './components/Header';
@@ -26,7 +26,7 @@ type Repo = {
 export default function Home() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [repos, setRepos] = useState<Repo[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);  // Correct usage of error state
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState<string>('');
   const [page, setPage] = useState(1);
@@ -35,7 +35,7 @@ export default function Home() {
   useEffect(() => {
     if (!username) return;
     setLoading(true);
-    setError(null);
+    setError(null);  // Clear any previous error
 
     const fetchUserProfile = async () => {
       try {
@@ -44,8 +44,11 @@ export default function Home() {
 
         const repoRes = await axios.get(`https://api.github.com/users/${username}/repos?per_page=30&page=${page}`);
         setRepos(repoRes.data);
-      } catch (error) {
-        setError('User not found');
+      } catch (err) {  // Error handling here
+        console.error('An error occurred:', err)
+        setError('User not found or there was an issue with the request');  // Set error message
+        setUserProfile(null);  // Clear previous profile on error
+        setRepos([]);  // Clear repos on error
       } finally {
         setLoading(false);
       }
@@ -55,14 +58,13 @@ export default function Home() {
   }, [username, page]);
 
   return (
-    <div>
+    <div className=' dark:bg-gray-800 dark:text-white pb-4 min-h-screen'>
       <Header />
       <Search onSearch={(name) => { setUsername(name); setPage(1); }} />
 
       {/* Handle Loading Effect */}
       {loading && <p className="text-center mt-4">Loading...</p>}
-      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
-
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}  {/* Display error message */}
 
       {/* Display User Profile */}
       {userProfile && (
