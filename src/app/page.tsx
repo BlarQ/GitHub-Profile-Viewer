@@ -42,7 +42,7 @@ export default function Home() {
         const profileRes = await axios.get(`https://api.github.com/users/${username}`);
         setUserProfile(profileRes.data);
 
-        const repoRes = await axios.get(`https://api.github.com/users/${username}/repos?per_page=30&page=${page}`);
+        const repoRes = await axios.get(`https://api.github.com/users/${username}/repos?per_page=10&page=${page}`);
         setRepos(repoRes.data);
       } catch (err) {  // Error handling here
         console.error('An error occurred:', err)
@@ -115,7 +115,7 @@ export default function Home() {
               </ul>
 
               {/* Pagination Controls */}
-              {userProfile.public_repos > 30 && (
+              {userProfile.public_repos > 10 && (
                 <div className="flex justify-between mt-4">
                   <button
                     className="bg-[#3d444d] text-white px-4 py-2 rounded"
@@ -124,10 +124,15 @@ export default function Home() {
                   >
                     Previous
                   </button>
+
+                  <div>
+                    Page {page} of {Math.ceil(userProfile.public_repos / 10)}
+                  </div>
+
                   <button
                     className="bg-[#3d444d] text-white px-4 py-2 rounded"
                     onClick={() => setPage(page + 1)}
-                    disabled={repos.length < 30}
+                    disabled={repos.length < 10}
                   >
                     Next
                   </button>
